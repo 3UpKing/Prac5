@@ -68,10 +68,17 @@
       starSym       =   17,
       dotSym        =   18,
       semiColonSym  =   19,
+<<<<<<< HEAD
       LeftSquareBracSym = 20,
       RightSquareBracSym = 21,
       BackSlashSym  =   22,
       DashSym       =   23,
+=======
+      LeftSquareBracSym =   20,
+      RightSquareBracSym = 21,
+      BackSlashSym  =   22,
+      dashSym       =   23,
+>>>>>>> e3689691343a3efa433802b5a2af3e4dd72806b6
       plusSym       =   24
       ;
 
@@ -144,24 +151,28 @@
         symLex.Append(ch); symKind = geqSym; GetChar();
         }
         break;
+
         case '=':
         //symKind = assignSym; GetChar();
         if (ch == '=') {
         symLex.Append(ch); symKind = eqlSym; GetChar();
         }
         break;
+
         case '!':
         //symKind = notSym; GetChar();
         if (ch == '=') {
         symLex.Append(ch); symKind = neqSym; GetChar();
         }
         break;
+
         case '|':
         //symKind = noSym; GetChar();
         if (ch == '|') {
         symLex.Append(ch); symKind = orSym; GetChar();
         }
         break;
+
         case '&':
         //symKind = noSym; GetChar();
         if (ch == '&') {
@@ -197,6 +208,24 @@
         // symKind = noSym; GetChar();
         if (ch == '+') {
         symLex.Append(ch); symKind = plusSym; GetChar();
+        }
+        break;
+
+        case '*':        
+        if (ch == '*') {
+        symLex.Append(ch); symKind = starSym; GetChar();
+        }
+        break;
+
+        case '.':      
+        if (ch == '.') {
+        symLex.Append(ch); symKind = dotSym; GetChar();
+        }
+        break;
+
+        case ';':        
+        if (ch == ';') {
+        symLex.Append(ch); symKind = semiColonSym; GetChar();
         }
         break;
 
