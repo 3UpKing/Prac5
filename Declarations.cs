@@ -48,26 +48,17 @@
     // +++++++++++++++++++++++  token kinds enumeration +++++++++++++++++++++++++
 
     const int
-<<<<<<< HEAD
-      noSym         =  0,
-      EOFSym        =  1;
-      charSym       =  2;
-      intSym        =  3;
-      boolSym       =  4;
-      longSym       =  5;
-      LbraceSym     =  6;
-      RbraceSym     =  7;
-      LbracketSym   =  8;
-      RbracketSym   =  9;
-      mulSym        =  10;
-
-
-=======
-      noSym        =  0,
-      EOFSym       =  1;
-      
->>>>>>> c0ff87bf2e9c26b77c3663c03443ae8881f4a320
-      // and others like this
+      noSym         =   0,
+      EOFSym        =   1,
+      identSym      =   2,
+      numSym        =   3,
+      lssSym        =   4,
+      leqSym        =   5,
+      geqSym        =   6,
+      eqlSym        =   7,  
+      neqSym        =   8,
+      orSym         =   9,
+      andSym        =   10;
 
     // +++++++++++++++++++++++++++++ Character Handler ++++++++++++++++++++++++++
 
@@ -100,8 +91,7 @@
     static void GetSym() {
     // Scans for next sym from input
       while (ch > EOF && ch <= ' ') GetChar();
-      StringBuilder symLex = new StringBuilder();
-      int symKind = noSym;
+      StringBuilder symLex = new StringBuilder();      
 
       int symKind = noSym;
         if (Char.IsLetter(ch)) {
