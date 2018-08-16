@@ -48,8 +48,18 @@
     // +++++++++++++++++++++++  token kinds enumeration +++++++++++++++++++++++++
 
     const int
-      noSym        =  0,
-      EOFSym       =  1;
+      noSym         =  0,
+      EOFSym        =  1;
+      charSym       =  2;
+      intSym        =  3;
+      boolSym       =  4;
+      longSym       =  5;
+      LbraceSym     =  6;
+      RbraceSym     =  7;
+      LbracketSym   =  8;
+      RbracketSym   =  9;
+      mulSym        =  10;
+
 
       // and others like this
 
