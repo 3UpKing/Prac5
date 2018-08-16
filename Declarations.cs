@@ -61,7 +61,19 @@
       andSym        =   10,
       gtrSym        =   11,
       assignSym     =   12,
-      notSym        =   13;
+      notSym        =   13,
+      LeftRndBracSym  =   14,
+      RightRndBracSym =   15,
+      commaSym      =   16,
+      starSym       =   17,
+      dotSym        =   18,
+      semiColonSym  =   19,
+      LeftSquareBracSym =   20,
+      RightSquareBracSym = 21,
+      BackSlashSym  =   22,
+      dashSym       =   23,
+      plusSym       =   24
+      ;
 
     // +++++++++++++++++++++++++++++ Character Handler ++++++++++++++++++++++++++
 
@@ -132,24 +144,35 @@
         symLex.Append(ch); symKind = geqSym; GetChar();
         }
         break;
+
         case '=':
         symKind = assignSym; GetChar();
         if (ch == '=') {
         symLex.Append(ch); symKind = eqlSym; GetChar();
         }
         break;
+
         case '!':
         symKind = notSym; GetChar();
         if (ch == '=') {
         symLex.Append(ch); symKind = neqSym; GetChar();
         }
         break;
+
         case '|':
         symKind = noSym; GetChar();
         if (ch == '|') {
         symLex.Append(ch); symKind = orSym; GetChar();
         }
         break;
+
+        case '&':
+        symKind = noSym; GetChar();
+        if (ch == '&') {
+        symLex.Append(ch); symKind = andSym; GetChar();
+        }
+        break;
+
         case '&':
         symKind = noSym; GetChar();
         if (ch == '&') {
