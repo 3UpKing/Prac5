@@ -1,0 +1,25 @@
+COMPILER Cdecls
+
+ /* Describe a subset of the forms that C declarations can assume */
+
+ CHARACTERS
+    digit = "0123456789" .
+    letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_" .
+
+ IGNORE CHR(0) .. CHR(31)
+
+ TOKENS
+    number = digit { digit } .
+    ident = letter { letter | digit } .
+
+ PRODUCTIONS
+    Cdecls = { DecList } EOF .
+    DecList = Type OneDecl { "," OneDecl } ";" .
+    Type = "int" | "void" | "bool" | "char" .
+    OneDecl = "*" OneDecl | Direct .
+    Direct = ( ident | "(" OneDecl ")" ) [ Suffix ] .
+    Suffix = Array { Array } | Params .
+    Params = "(" [ OneParam { "," OneParam } ] ")" .
+    OneParam = Type [ OneDecl ] .
+    Array = "[" [ number ] "]" .
+ END Cdecls.
