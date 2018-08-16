@@ -156,6 +156,10 @@
         symLex.Append(ch); symKind = andSym; GetChar();
         }
         break;
+
+        default:        
+          symKind = noSym; GetChar();
+        break;
       }
       // over to you!
 
@@ -195,7 +199,7 @@
       GetChar();                                  // Lookahead character
 
   //  To test the scanner we can use a loop like the following:
-
+  
       do {
         GetSym();                                 // Lookahead symbol
         OutFile.StdOut.Write(sym.kind, 3);
