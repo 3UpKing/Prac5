@@ -58,7 +58,10 @@
       eqlSym        =   7,  
       neqSym        =   8,
       orSym         =   9,
-      andSym        =   10;
+      andSym        =   10,
+      gtrSym        =   11,
+      assignSym     =   12,
+      notSym        =   13;
 
     // +++++++++++++++++++++++++++++ Character Handler ++++++++++++++++++++++++++
 
@@ -157,6 +160,7 @@
       // over to you!
 
       sym = new Token(symKind, symLex.ToString());
+    }
     } // GetSym
 
   /*  ++++ Commented out for the moment
