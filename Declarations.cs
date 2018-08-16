@@ -173,10 +173,21 @@
         }
         break;
 
-        case '&':
-        symKind = noSym; GetChar();
-        if (ch == '&') {
-        symLex.Append(ch); symKind = andSym; GetChar();
+        case '*':        
+        if (ch == '*') {
+        symLex.Append(ch); symKind = starSym; GetChar();
+        }
+        break;
+
+        case '.':      
+        if (ch == '.') {
+        symLex.Append(ch); symKind = dotSym; GetChar();
+        }
+        break;
+
+        case ';':        
+        if (ch == ';') {
+        symLex.Append(ch); symKind = semiColonSym; GetChar();
         }
         break;
 
