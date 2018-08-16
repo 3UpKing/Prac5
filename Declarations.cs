@@ -48,6 +48,7 @@
     // +++++++++++++++++++++++  token kinds enumeration +++++++++++++++++++++++++
 
     const int
+<<<<<<< HEAD
       noSym         =  0,
       EOFSym        =  1;
       charSym       =  2;
@@ -61,6 +62,11 @@
       mulSym        =  10;
 
 
+=======
+      noSym        =  0,
+      EOFSym       =  1;
+      
+>>>>>>> c0ff87bf2e9c26b77c3663c03443ae8881f4a320
       // and others like this
 
     // +++++++++++++++++++++++++++++ Character Handler ++++++++++++++++++++++++++
@@ -97,6 +103,67 @@
       StringBuilder symLex = new StringBuilder();
       int symKind = noSym;
 
+      int symKind = noSym;
+        if (Char.IsLetter(ch)) {
+        do {
+        symLex.Append(ch); GetChar();
+        } 
+        while (Char.IsLetterOrDigit(ch));
+        symKind = identSym;
+        }
+        else if (Char.IsDigit(ch)) {
+        do {
+        symLex.Append(ch); GetChar();
+        } while (Char.IsDigit(ch));
+        symKind = numSym;
+        }
+        else {
+        symLex.Append(ch);
+
+
+      switch (ch) {
+        case EOF:
+        symLex = new StringBuilder("EOF"); // special case
+        symKind = EOFSym; break; // no need to GetChar
+        case '<':
+        symKind = lssSym; GetChar();
+
+        if (ch == '=') {
+        symLex.Append(ch); symKind = leqSym; GetChar();
+        }
+        break;
+
+        case '>':
+        symKind = gtrSym; GetChar();
+        if (ch == '=') {
+        symLex.Append(ch); symKind = geqSym; GetChar();
+        }
+        break;
+        case '=':
+        symKind = assignSym; GetChar();
+        if (ch == '=') {
+        symLex.Append(ch); symKind = eqlSym; GetChar();
+        }
+        break;
+        case '!':
+        symKind = notSym; GetChar();
+        if (ch == '=') {
+        symLex.Append(ch); symKind = neqSym; GetChar();
+        }
+        break;
+        case '|':
+        symKind = noSym; GetChar();
+        if (ch == '|') {
+        symLex.Append(ch); symKind = orSym; GetChar();
+        }
+        break;
+        case '&':
+        symKind = noSym; GetChar();
+        if (ch == '&') {
+        symLex.Append(ch); symKind = andSym; GetChar();
+        }
+        break;
+      }
       // over to you!
 
       sym = new Token(symKind, symLex.ToString());
