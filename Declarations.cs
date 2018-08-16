@@ -68,17 +68,10 @@
       starSym       =   17,
       dotSym        =   18,
       semiColonSym  =   19,
-<<<<<<< HEAD
       LeftSquareBracSym = 20,
       RightSquareBracSym = 21,
       BackSlashSym  =   22,
       DashSym       =   23,
-=======
-      LeftSquareBracSym =   20,
-      RightSquareBracSym = 21,
-      BackSlashSym  =   22,
-      dashSym       =   23,
->>>>>>> e3689691343a3efa433802b5a2af3e4dd72806b6
       plusSym       =   24
       ;
 
@@ -243,7 +236,13 @@
         }
         break;
 
-       
+       case '\\':
+        symKind = BackSlashSym; GetChar();
+        if (ch == '\\') {
+        symLex.Append(ch); symKind = BackSlashSym; GetChar();
+        }
+        break;
+
         default:        
           symKind = noSym; GetChar();
         break;
