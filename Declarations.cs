@@ -229,6 +229,21 @@
         }
         break;
 
+               case '[':
+        symKind = LeftSquareBracSym; GetChar();
+        if (ch == '[') {
+        symLex.Append(ch); symKind = LeftSquareBracSym; GetChar();
+        }
+        break;
+
+        case ']':
+        symKind = RightSquareBracSym; GetChar();
+        if (ch == ']') {
+        symLex.Append(ch); symKind = RightSquareBracSym; GetChar();
+        }
+        break;
+
+       
         default:        
           symKind = noSym; GetChar();
         break;
