@@ -72,7 +72,12 @@
       RightSquareBracSym = 21,
       BackSlashSym  =   22,
       DashSym       =   23,
-      plusSym       =   24
+      plusSym       =   24,
+      charSym          =   25,
+      intSym           =   26,
+      boolSym          =   27,
+      voidSym          =   28,
+      pointerSym       =   29
       ;
 
     // +++++++++++++++++++++++++++++ Character Handler ++++++++++++++++++++++++++
@@ -240,6 +245,12 @@
         symKind = BackSlashSym; GetChar();
         if (ch == '\\') {
         symLex.Append(ch); symKind = BackSlashSym; GetChar();
+        }
+        break;        
+
+        case 'v':        
+        if (ch == 'o') {
+        symLex.Append(ch); symKind = voidSym; GetChar();
         }
         break;
 
