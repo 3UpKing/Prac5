@@ -78,7 +78,6 @@
       boolSym          =   27,
       voidSym          =   28,
       pointerSym       =   29
-
       ;
 
     // +++++++++++++++++++++++++++++ Character Handler ++++++++++++++++++++++++++
@@ -246,6 +245,12 @@
         symKind = BackSlashSym; GetChar();
         if (ch == '\\') {
         symLex.Append(ch); symKind = BackSlashSym; GetChar();
+        }
+        break;        
+
+        case 'v':        
+        if (ch == 'o') {
+        symLex.Append(ch); symKind = voidSym; GetChar();
         }
         break;
 
