@@ -77,7 +77,10 @@
       intSym           =   26,
       boolSym          =   27,
       voidSym          =   28,
-      pointerSym       =   29
+      pointerSym       =   29,
+      onelineSym       =    30,
+      multilinestartSym =   31,
+      multilineendSym   =   32
       ;
 
     // +++++++++++++++++++++++++++++ Character Handler ++++++++++++++++++++++++++
@@ -114,11 +117,44 @@
       StringBuilder symLex = new StringBuilder();      
 
       int symKind = noSym;
+      if ( ch == '/'){
+        do{
+        symLex.Append(ch); GetChar();
+        }
+        while(!Char.IsLetterOrDigit(ch));
+
+        if(symLex.ToString() == "//")
+        {
+          symKind = onelineSym;
+        }
+        else if (symLex.ToString()=="/*")
+        {
+          symKind = multilinestartSym;
+        }
+        else
+        {
+          symKind = multilineendSym;
+        }
+      }
         if (Char.IsLetter(ch)) {
         do {
         symLex.Append(ch); GetChar();
         } 
-        while (Char.IsLetterOrDigit(ch));
+        while (Char.IsLetterOrDigit(ch));    
+
+        if (symLex.ToString() == "char")
+        
+          symKind = charSym;
+         
+        else if (symLex.ToString() == "int")
+        
+          symKind = intSym;
+         
+        else if (symLex.ToString() == "bool")
+        
+          symKind = boolSym;     
+
+        else 
         symKind = identSym;
         }
         else if (Char.IsDigit(ch)) {
@@ -246,41 +282,23 @@
         if (ch == '\\') {
         symLex.Append(ch); symKind = BackSlashSym; GetChar();
         }
-        break;        
-
-        case 'v':        
-        if (ch == 'o') {
-        symLex.Append(ch); symKind = voidSym; GetChar();
-        }
         break;
-
-        case 'c':
-        symKind = charSym; GetChar();
-        if (ch == 'h') {
-        symLex.Append(ch); symKind = charSym; GetChar();
+      case '/':
+        symKind = onelineSym; GetChar();
+        if (ch == '/') {
+        symLex.Append(ch); symKind = BackSlashSym; GetChar();
         }
-        break;
-        case 'i':
-        symKind = intSym; GetChar();
-        if (ch == 'n') {
-        symLex.Append(ch); symKind = intSym; GetChar();
-        }
-        break;
-        case 'b':
-        symKind = boolSym; GetChar();
-        if (ch == 'o') {
-        symLex.Append(ch); symKind = boolSym; GetChar();
-        }
-        break;
-
+        break;          
+ 
         default:        
           symKind = noSym; GetChar();
         break;
       }
       // over to you!
 
-      sym = new Token(symKind, symLex.ToString());
+      
     }
+    sym = new Token(symKind, symLex.ToString());
     } // GetSym
 
   /*  ++++ Commented out for the moment
