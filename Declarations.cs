@@ -65,7 +65,7 @@
       LeftRndBracSym  =   14,
       RightRndBracSym =   15,
       commaSym      =   16,
-      starSym       =   17,
+      multiplySym       =   17,
       dotSym        =   18,
       semiColonSym  =   19,
       LeftSquareBracSym = 20,
@@ -117,17 +117,20 @@
       StringBuilder symLex = new StringBuilder();      
 
       int symKind = noSym;
+
       if ( ch == '/'){
         do{
-        symLex.Append(ch); GetChar();
+        if (ch != ' ')
+            symLex.Append(ch);
+        GetChar();
         }
         while(!Char.IsLetterOrDigit(ch));
-
+        
         if(symLex.ToString() == "//")
         {
           symKind = onelineSym;
         }
-        else if (symLex.ToString()=="/*")
+        else if (symLex.ToString() == "/*")
         {
           symKind = multilinestartSym;
         }
@@ -136,7 +139,9 @@
           symKind = multilineendSym;
         }
       }
-        if (Char.IsLetter(ch)) {
+
+      else if (Char.IsLetter(ch)) {
+
         do {
         symLex.Append(ch); GetChar();
         } 
@@ -145,159 +150,180 @@
         if (symLex.ToString() == "char")
         
           symKind = charSym;
-         
+        
         else if (symLex.ToString() == "int")
         
           symKind = intSym;
-         
+        
         else if (symLex.ToString() == "bool")
         
-          symKind = boolSym;     
+          symKind = boolSym;
+
+        else if (symLex.ToString() == "void")
+        
+          symKind = voidSym;
 
         else 
         symKind = identSym;
-        }
-        else if (Char.IsDigit(ch)) {
-        do {
-        symLex.Append(ch); GetChar();
-        } while (Char.IsDigit(ch));
-        symKind = numSym;
-        }
-        else {
+
+      }
+
+      else if (Char.IsDigit(ch)) {
+      do {
+      symLex.Append(ch); GetChar();
+      } while (Char.IsDigit(ch));
+      symKind = numSym;
+      }
+
+      else {
         symLex.Append(ch);
 
 
-      switch (ch) {
-        case EOF:
-        symLex = new StringBuilder("EOF"); // special case
-        symKind = EOFSym; break; // no need to GetChar
-        case '<':
-        symKind = lssSym; GetChar();
+        switch (ch) {
+          case EOF:
+          symLex = new StringBuilder("EOF"); // special case
+          symKind = EOFSym; break; // no need to GetChar
+          case '<':
+          symKind = lssSym; GetChar();
 
-        if (ch == '=') {
-        symLex.Append(ch); symKind = leqSym; GetChar();
-        }
-        break;
+          if (ch == '=') {
+          symLex.Append(ch); symKind = leqSym; GetChar();
+          }
+          break;
 
-        case '>':
-        //symKind = gtrSym; GetChar();
-        if (ch == '=') {
-        symLex.Append(ch); symKind = geqSym; GetChar();
-        }
-        break;
+          case '>':
+          //symKind = gtrSym; GetChar();
+          if (ch == '=') {
+          symLex.Append(ch); symKind = geqSym; GetChar();
+          }
+          break;
 
-        case '=':
-        //symKind = assignSym; GetChar();
-        if (ch == '=') {
-        symLex.Append(ch); symKind = eqlSym; GetChar();
-        }
-        break;
+          case '=':
+          //symKind = assignSym; GetChar();
+          if (ch == '=') {
+          symLex.Append(ch); symKind = eqlSym; GetChar();
+          }
+          break;
 
-        case '!':
-        //symKind = notSym; GetChar();
-        if (ch == '=') {
-        symLex.Append(ch); symKind = neqSym; GetChar();
-        }
-        break;
+          case '!':
+          //symKind = notSym; GetChar();
+          if (ch == '=') {
+          symLex.Append(ch); symKind = neqSym; GetChar();
+          }
+          break;
 
-        case '|':
-        //symKind = noSym; GetChar();
-        if (ch == '|') {
-        symLex.Append(ch); symKind = orSym; GetChar();
-        }
-        break;
+          case '|':
+          //symKind = noSym; GetChar();
+          if (ch == '|') {
+          symLex.Append(ch); symKind = orSym; GetChar();
+          }
+          break;
 
-        case '&':
-        //symKind = noSym; GetChar();
-        if (ch == '&') {
-        symLex.Append(ch); symKind = andSym; GetChar();
-        }
-        break;
-        case '(':
-         //symKind = noSym; GetChar();
-        if (ch == '(') {
-        symLex.Append(ch); symKind = LeftRndBracSym; GetChar();
-        }
-        break;
-         case ')':
-         //symKind = noSym; GetChar();
-        if (ch == ')') {
-        symLex.Append(ch); symKind = RightRndBracSym; GetChar();
-        }
-        break;
-         case ',':
-         //symKind = noSym; GetChar();
-        if (ch == ',') {
-        symLex.Append(ch); symKind = commaSym; GetChar();
-        }
-        break;
+          case '&':
+          //symKind = noSym; GetChar();
+          if (ch == '&') {
+          symLex.Append(ch); symKind = andSym; GetChar();
+          }
+          break;
+          case '(':
+          //symKind = noSym; GetChar();
+          if (ch == '(') {
+          symLex.Append(ch); symKind = LeftRndBracSym; GetChar();
+          }
+          break;
+          case ')':
+          //symKind = noSym; GetChar();
+          if (ch == ')') {
+          symLex.Append(ch); symKind = RightRndBracSym; GetChar();
+          }
+          break;
+          case ',':
+          //symKind = noSym; GetChar();
+          if (ch == ',') {
+          symLex.Append(ch); symKind = commaSym; GetChar();
+          }
+          break;
 
-         case '-':
-         //symKind = noSym; GetChar();
-        if (ch == '-') {
-        symLex.Append(ch); symKind = DashSym; GetChar();
-        }
-        break;
-         case '+':
-        // symKind = noSym; GetChar();
-        if (ch == '+') {
-        symLex.Append(ch); symKind = plusSym; GetChar();
-        }
-        break;
+          case '-':
+          //symKind = noSym; GetChar();
+          if (ch == '-') {
+          symLex.Append(ch); symKind = DashSym; GetChar();
+          }
+          break;
+          case '+':
+          // symKind = noSym; GetChar();
+          if (ch == '+') {
+          symLex.Append(ch); symKind = plusSym; GetChar();
+          }
+          break;
 
-        case '*':        
-        if (ch == '*') {
-        symLex.Append(ch); symKind = starSym; GetChar();
-        }
-        break;
+          case '*':        
+            if (ch == '*') {              
+              GetChar();
+              symLex.Append(ch);
 
-        case '.':      
-        if (ch == '.') {
-        symLex.Append(ch); symKind = dotSym; GetChar();
-        }
-        break;
+              if(ch == '/'){
+                symKind = multilineendSym; GetChar();
+              }                       
+              
+              else if (ch == ' ') {
+                do {
+                  symLex.Append(ch); GetChar();
+                } while (ch == ' ');    //ignore whitespace
+                            
+                if (Char.IsDigit(ch)){
+                  symKind = multiplySym; GetChar();
+                }
+              }
 
-        case ';':        
-        if (ch == ';') {
-        symLex.Append(ch); symKind = semiColonSym; GetChar();
-        }
-        break;
+              else {
+                            symKind = pointerSym; GetChar();
+              } 
+                
+            }
+          break;
 
-               case '[':
-        symKind = LeftSquareBracSym; GetChar();
-        if (ch == '[') {
-        symLex.Append(ch); symKind = LeftSquareBracSym; GetChar();
-        }
-        break;
+          case '.':      
+          if (ch == '.') {
+          symLex.Append(ch); symKind = dotSym; GetChar();
+          }
+          break;
 
-        case ']':
-        symKind = RightSquareBracSym; GetChar();
-        if (ch == ']') {
-        symLex.Append(ch); symKind = RightSquareBracSym; GetChar();
-        }
-        break;
+          case ';':        
+          if (ch == ';') {
+          symLex.Append(ch); symKind = semiColonSym; GetChar();
+          }
+          break;
 
-       case '\\':
-        symKind = BackSlashSym; GetChar();
-        if (ch == '\\') {
-        symLex.Append(ch); symKind = BackSlashSym; GetChar();
+                case '[':
+          symKind = LeftSquareBracSym; GetChar();
+          if (ch == '[') {
+          symLex.Append(ch); symKind = LeftSquareBracSym; GetChar();
+          }
+          break;
+
+          case ']':
+          symKind = RightSquareBracSym; GetChar();
+          if (ch == ']') {
+          symLex.Append(ch); symKind = RightSquareBracSym; GetChar();
+          }
+          break;
+
+        case '\\':
+          symKind = BackSlashSym; GetChar();
+          if (ch == '\\') {
+          symLex.Append(ch); symKind = BackSlashSym; GetChar();
+          }
+          break;                  
+  
+          default:        
+            symKind = noSym; GetChar();
+          break;
         }
-        break;
-      case '/':
-        symKind = onelineSym; GetChar();
-        if (ch == '/') {
-        symLex.Append(ch); symKind = BackSlashSym; GetChar();
-        }
-        break;          
- 
-        default:        
-          symKind = noSym; GetChar();
-        break;
-      }
-      // over to you!
+        // over to you!
 
       
-    }
+      }
     sym = new Token(symKind, symLex.ToString());
     } // GetSym
 
