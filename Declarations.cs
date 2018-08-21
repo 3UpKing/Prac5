@@ -129,10 +129,13 @@
         if(symLex.ToString() == "//")
         {
           symKind = onelineSym;
+          while (ch != '\n') { GetChar(); }//ignore rest of comment
+          GetChar(); //read in next char
         }
         else if (symLex.ToString() == "/*")
         {
           symKind = multilinestartSym;
+          while (ch != '*') { GetChar(); }//ignore rest of comment          
         }
         else
         {
@@ -145,7 +148,7 @@
         do {
         symLex.Append(ch); GetChar();
         } 
-        while (Char.IsLetterOrDigit(ch));    
+        while (Char.IsLetterOrDigit(ch) | ch == '_');    
 
         if (symLex.ToString() == "char")
         
@@ -261,26 +264,37 @@
             if (ch == '*') {              
               GetChar();
               symLex.Append(ch);
-
-              if(ch == '/'){
-                symKind = multilineendSym; GetChar();
-              }                       
-              
-              else if (ch == ' ') {
-                do {
-                  symLex.Append(ch); GetChar();
-                } while (ch == ' ');    //ignore whitespace
-                            
-                if (Char.IsDigit(ch)){
-                  symKind = multiplySym; GetChar();
+                if (ch == '/')
+                {
+                    symKind = multilineendSym; GetChar();
                 }
-              }
 
-              else {
-                            symKind = pointerSym; GetChar();
-              } 
+                else if (ch == ' ')
+                {
+                    do
+                    {
+                        symLex.Append(ch); GetChar();
+                    } while (ch == ' ');    //ignore whitespace
+
+                    if (Char.IsDigit(ch))
+                    {
+                        symKind = multiplySym; GetChar();
+                    }
+                }
+
+                else if (Char.IsLetter(ch))
+                {
+                    symKind = pointerSym;
+                    do
+                    {
+                        GetChar();
+                        if (Char.IsLetterOrDigit(ch) | ch == '_')
+                            symLex.Append(ch);
+                    } while (Char.IsLetterOrDigit(ch) | ch == '_');                
+                }
+             } 
                 
-            }
+            
           break;
 
           case '.':      
@@ -375,6 +389,7 @@
 
   */
       output.Close();
+        Console.ReadLine();
     } // Main
 
   } // Declarations
