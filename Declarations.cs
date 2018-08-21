@@ -261,36 +261,31 @@
           break;
 
           case '*':        
-            if (ch == '*') {              
-              GetChar();
-              symLex.Append(ch);
+            if (ch == '*') {
+                GetChar();
+                symLex.Append(ch);
+                while (ch == ' ') { GetChar(); symLex.Append(ch); } // skip whitespace
+
                 if (ch == '/')
                 {
                     symKind = multilineendSym; GetChar();
-                }
-
-                else if (ch == ' ')
+                } 
+                
+                if (Char.IsDigit(ch))
                 {
-                    do
-                    {
-                        symLex.Append(ch); GetChar();
-                    } while (ch == ' ');    //ignore whitespace
-
-                    if (Char.IsDigit(ch))
-                    {
-                        symKind = multiplySym; GetChar();
-                    }
+                    symKind = multiplySym; GetChar();
                 }
+                
 
-                else if (Char.IsLetter(ch))
+                else if (Char.IsLetter(ch) | ch == '*')
                 {
                     symKind = pointerSym;
                     do
                     {
                         GetChar();
-                        if (Char.IsLetterOrDigit(ch) | ch == '_')
+                        if (Char.IsLetterOrDigit(ch) | ch == '_' | ch == '*')
                             symLex.Append(ch);
-                    } while (Char.IsLetterOrDigit(ch) | ch == '_');                
+                    } while (Char.IsLetterOrDigit(ch) | ch == '_' | ch == '*');                
                 }
              } 
                 
