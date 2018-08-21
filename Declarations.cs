@@ -339,7 +339,7 @@
   /*  ++++ Commented out for the moment
 
     // +++++++++++++++++++++++++++++++ Parser +++++++++++++++++++++++++++++++++++
-
+    */
     static void Accept(int wantedSym, string errorMessage) {
     // Checks that lookahead token is wantedSym
       if (sym.kind == wantedSym) GetSym(); else Abort(errorMessage);
@@ -350,9 +350,30 @@
       if (allowedSet.Contains(sym.kind)) GetSym(); else Abort(errorMessage);
     } // Accept
 
-    static void CDecls() {}
+    static void CDecls() {
+        //CDecls = {DecList}
+        DecList();
+        while (sym.kind == semiColonSym)
+        {
+            Accept(semiColonSym, "; expected");
+            DecList();
+        }
+    }
 
-  ++++++ */
+    static void DecList() {
+        Type();
+        OneDecl();        
+    }
+
+    static void Type(){
+
+    }
+
+    static void OneDecl(){
+
+    }
+
+  //++++++ */
 
     // +++++++++++++++++++++ Main driver function +++++++++++++++++++++++++++++++
 
