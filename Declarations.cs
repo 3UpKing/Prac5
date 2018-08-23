@@ -280,7 +280,7 @@
                 else //if (Char.IsLetter(ch) | ch == '*')
                 {
                     symKind = pointerSym;
-                    GetChar();
+                    //no need for GetChar(); as next character has already been read in for next call 
 
                     //do
                     //{
@@ -418,14 +418,18 @@
     static void Direct()
     {
         //Direct = ( ident | "(" OneDecl ")" ) [ Suffix ] .
-        if (sym.kind == identSym)
-            Accept(identSym, "identifier expected");
-        else
+        switch (sym.kind)
         {
-            Accept(LeftRndBracSym, "( expected");
-            OneDecl();
-            Accept(RightRndBracSym, ") expected");
-        }
+            case LeftRndBracSym:
+                Accept(LeftRndBracSym, "( expected");
+                OneDecl();
+                Accept(RightRndBracSym, ") expected");
+                break;
+
+            default:
+                Accept(identSym, "identifier expected");
+                break;
+        }        
 
         if (sym.kind == LeftSquareBracSym | sym.kind == LeftRndBracSym)
         {
@@ -435,14 +439,13 @@
 
     static void Suffix()
     {
-        //Suffix = Array { Array } | Params.
-        Array();
+        //Suffix = Array { Array } | Params.        
         if (sym.kind == LeftSquareBracSym)
             while (sym.kind == LeftSquareBracSym)
             {
                 Array();
             }
-        else if (sym.kind == LeftRndBracSym)
+        else //if (sym.kind == LeftRndBracSym)
         {
             Params();
         }
@@ -452,6 +455,7 @@
     {
         //Params = "(" [ OneParam { "," OneParam } ] ")" .
         Accept(LeftRndBracSym, "( expected");
+
         if (sym.kind == intSym | sym.kind == voidSym | sym.kind == boolSym | sym.kind == charSym)
         {
             OneParam();
@@ -460,6 +464,7 @@
                 OneParam();
             }
         }
+
         Accept(RightRndBracSym, ") expected");
     }
 
@@ -467,7 +472,7 @@
     {
         //OneParam = Type [ OneDecl ] .
         Type();
-        if (sym.kind == pointerSym)
+        if (sym.kind == pointerSym | sym.kind == identSym | sym.kind == LeftRndBracSym)
             OneDecl();
     }
 
