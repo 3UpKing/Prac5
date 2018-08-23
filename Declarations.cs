@@ -343,6 +343,7 @@
             do { GetSym(); }
             while (sym.kind != multilineendSym);
             GetSym(); //get next sym after comment 
+            return;     //skip rest of function no need to continue since we got sym already
 
             
         }
@@ -399,11 +400,11 @@
     }
 
     static void OneDecl() {
-        //OneDecl = "*" OneDecl | Direct .
-        Accept(pointerSym,"* expected");
+        //OneDecl = "*" OneDecl | Direct .        
         switch (sym.kind)
         {
             case pointerSym:
+                Accept(pointerSym, "* expected");
                 OneDecl();
                 break;
             default:
@@ -440,7 +441,7 @@
             {
                 Array();
             }
-        else
+        else if (sym.kind == LeftRndBracSym)
         {
             Params();
         }
