@@ -336,16 +336,17 @@
       
       }
 
-        if (symKind == onelineSym) //ignore comments
+        if (symKind == onelineSym)
+        { //ignore comments
             GetSym();
+            return;     //skip rest of function no need to continue since we got sym already
+        }
         else if (symKind == multilinestartSym)
         {
             do { GetSym(); }
-            while (sym.kind != multilineendSym);
+            while (sym.kind != multilineendSym);    //ignore next symbols till end of comment found 
             GetSym(); //get next sym after comment 
             return;     //skip rest of function no need to continue since we got sym already
-
-            
         }
             
 
