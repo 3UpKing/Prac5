@@ -271,21 +271,23 @@
                     symKind = multilineendSym; GetChar();
                 } 
                 
-                if (Char.IsDigit(ch))
+                else if (Char.IsDigit(ch))
                 {
                     symKind = multiplySym; GetChar();
                 }
                 
 
-                else if (Char.IsLetter(ch) | ch == '*')
+                else //if (Char.IsLetter(ch) | ch == '*')
                 {
                     symKind = pointerSym;
-                    do
-                    {
-                        GetChar();
-                        if (Char.IsLetterOrDigit(ch) | ch == '_' | ch == '*')
-                            symLex.Append(ch);
-                    } while (Char.IsLetterOrDigit(ch) | ch == '_' | ch == '*');                
+                    GetChar();
+
+                    //do
+                    //{
+                    //    GetChar();
+                    //    if (Char.IsLetterOrDigit(ch) | ch == '_' | ch == '*')
+                    //        symLex.Append(ch);
+                    //} while (Char.IsLetterOrDigit(ch) | ch == '_' | ch == '*');                
                 }
              } 
                 
@@ -333,6 +335,19 @@
 
       
       }
+
+        if (symKind == onelineSym) //ignore comments
+            GetSym();
+        else if (symKind == multilinestartSym)
+        {
+            do { GetSym(); }
+            while (sym.kind != multilineendSym);
+            GetSym(); //get next sym after comment 
+
+            
+        }
+            
+
     sym = new Token(symKind, symLex.ToString());
     } // GetSym
 
@@ -351,26 +366,116 @@
     } // Accept
 
     static void CDecls() {
-        //CDecls = {DecList}
+        //CDecls = {DecList} EOF . 
         DecList();
-        while (sym.kind == semiColonSym)
-        {
-            Accept(semiColonSym, "; expected");
+        while (sym.kind == intSym | sym.kind == voidSym | sym.kind == boolSym | sym.kind == charSym)
+        {            
             DecList();
         }
+        Accept(EOFSym, "EOF Expected");
     }
 
     static void DecList() {
+        //DecList = Type OneDecl { "," OneDecl } ";" .
         Type();
-        OneDecl();        
+        OneDecl();
+        while (sym.kind == commaSym)
+        {
+            Accept(commaSym, ", expected");
+            OneDecl();
+        }
+        Accept(semiColonSym, "; expected");
     }
 
     static void Type(){
+        //Type = "int" | "void" | "bool" | "char" .
+        IntSet allowedTypes = new IntSet();
+        allowedTypes.Incl(intSym);
+        allowedTypes.Incl(voidSym);
+        allowedTypes.Incl(boolSym);
+        allowedTypes.Incl(charSym);
 
+        Accept(allowedTypes, "valid data type expected");
     }
 
-    static void OneDecl(){
+    static void OneDecl() {
+        //OneDecl = "*" OneDecl | Direct .
+        Accept(pointerSym,"* expected");
+        switch (sym.kind)
+        {
+            case pointerSym:
+                OneDecl();
+                break;
+            default:
+                Direct();
+                break;
+        }        
+        
+    }
 
+    static void Direct()
+    {
+        //Direct = ( ident | "(" OneDecl ")" ) [ Suffix ] .
+        if (sym.kind == identSym)
+            Accept(identSym, "identifier expected");
+        else
+        {
+            Accept(LeftRndBracSym, "( expected");
+            OneDecl();
+            Accept(RightRndBracSym, ") expected");
+        }
+
+        if (sym.kind == LeftSquareBracSym | sym.kind == LeftRndBracSym)
+        {
+            Suffix();
+        }
+    }
+
+    static void Suffix()
+    {
+        //Suffix = Array { Array } | Params.
+        Array();
+        if (sym.kind == LeftSquareBracSym)
+            while (sym.kind == LeftSquareBracSym)
+            {
+                Array();
+            }
+        else
+        {
+            Params();
+        }
+    }
+
+    static void Params()
+    {
+        //Params = "(" [ OneParam { "," OneParam } ] ")" .
+        Accept(LeftRndBracSym, "( expected");
+        if (sym.kind == intSym | sym.kind == voidSym | sym.kind == boolSym | sym.kind == charSym)
+        {
+            OneParam();
+            while (sym.kind == commaSym)
+            {
+                OneParam();
+            }
+        }
+        Accept(RightRndBracSym, ") expected");
+    }
+
+    static void OneParam()
+    {
+        //OneParam = Type [ OneDecl ] .
+        Type();
+        if (sym.kind == pointerSym)
+            OneDecl();
+    }
+
+    static void Array()
+    {
+        //Array = "[" [ number ] "]" .
+        Accept(LeftSquareBracSym, "[ expected");
+        if (sym.kind == numSym)
+            Accept(numSym, "number expected");
+        Accept(RightSquareBracSym, "] expected");
     }
 
   //++++++ */
@@ -390,21 +495,22 @@
 
   //  To test the scanner we can use a loop like the following:
   
-      do {
-        GetSym();                                 // Lookahead symbol
-        OutFile.StdOut.Write(sym.kind, 3);
-        OutFile.StdOut.WriteLine(" " + sym.val);  // See what we got
-      } while (sym.kind != EOFSym);
+      //do {
+      //  GetSym();                                 // Lookahead symbol
+      //  OutFile.StdOut.Write(sym.kind, 3);
+      //  OutFile.StdOut.WriteLine(" " + sym.val);  // See what we got
+      //} while (sym.kind != EOFSym);
 
-  /*  After the scanner is debugged we shall substitute this code:
+  /*  After the scanner is debugged we shall substitute this code: */
 
       GetSym();                                   // Lookahead symbol
       CDecls();                                   // Start to parse from the goal symbol
       // if we get back here everything must have been satisfactory
       Console.WriteLine("Parsed correctly");
+        Console.ReadLine();
 
-  */
-      output.Close();
+        //*/
+        output.Close();
         Console.ReadLine();
     } // Main
 
